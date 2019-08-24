@@ -36,9 +36,7 @@ android {
 }
 
 repositories {
-  maven {
-      url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
-  }
+  maven { url "https://artifactory.qiscus.com/artifactory/qiscus-meet" }
   google()
   mavenCentral()
   jcenter()
@@ -46,8 +44,5 @@ repositories {
 
 dependencies {
     //resolutionStrategy.force "org.webkit:android-jsc:r224109"
-    implementation ('org.jitsi.react:jitsi-meet-sdk:2.1.0') {
-      transitive = true
-      //compile ("org.webkit:android-jsc:r224109") { force = true }
-    }
+  implementation ('com.qiscus.meet:meet-sdk:0.0.5'){ transitive = true }
 }
