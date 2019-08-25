@@ -5,7 +5,7 @@
 import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 const { RNJitsiMeetNavigatorManager } = NativeModules;
-export const JitsiMeetEvents = Platform.select({
+export const QiscusMeetEvents = Platform.select({
   ios: new NativeEventEmitter(RNJitsiMeetNavigatorManager),
   android: DeviceEventEmitter,
 });
