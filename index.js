@@ -1,5 +1,5 @@
 /**
- * @providesModule JitsiMeet
+ * @providesModule QiscusMeet
  */
 
 import { DeviceEventEmitter, NativeEventEmitter, NativeModules, Platform } from 'react-native';
