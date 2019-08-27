@@ -3,24 +3,24 @@ React native wrapper for Jitsi Meet SDK
 
 ## Install
 
-`npm install react-native-jitsi-meet --save` 
+`npm install react-native-qiscus-meet --save` 
 
 ## Use
 
 In your component, 
 
-1.) import JitsiMeet and JitsiMeetEvents: `import JitsiMeet, { JitsiMeetEvents } from 'react-native-jitsi-meet';`
+1.) import JitsiMeet and JitsiMeetEvents: `import QiscusMeet, { QiscusMeetEvents } from 'react-native-qiscus-meet';`
 
 2.) add the following code: 
 
 ```
   const initiateVideoCall = () => {
-    JitsiMeet.initialize();
-    JitsiMeetEvents.addListener('CONFERENCE_LEFT', (data) => {
+    QiscusMeet.initialize();
+    QiscusMeetEvents.addListener('CONFERENCE_LEFT', (data) => {
       console.log('CONFERENCE_LEFT');
     });
     setTimeout(() => {
-      JitsiMeet.call(`<your url>`);
+      QiscusMeet.call(`<your url>`);
     }, 1000);
   };
 ```
@@ -34,9 +34,9 @@ You can add listeners for the following events:
 ## iOS Manual Install
 ### Step 1. Add Files Into Project
 - 1-1.) in Xcode: Right click `Libraries` ➜ `Add Files to [project]`  
-- 1-2.) choose `node_modules/react-native-jitsi-meet/ios/RNJitsiMeet.xcodeproj` then `Add`  
-- 1-3.) add `node_modules/react-native-jitsi-meet/ios/WebRTC.framework` and `node_modules/react-native-jitsi-meet/ios/JitsiMeet.framework` to the Frameworks folder
-- 1-4.) add `node_modules/react-native-jitsi-meet/ios/JitsiMeet.storyboard` in the same folder as AppDelegate.m
+- 1-2.) choose `node_modules/react-native-qiscus-meet/ios/RNJitsiMeet.xcodeproj` then `Add`  
+- 1-3.) add `node_modules/react-native-qiscus-meet/ios/WebRTC.framework` and `node_modules/react-native-qiscus-meet/ios/JitsiMeet.framework` to the Frameworks folder
+- 1-4.) add `node_modules/react-native-qiscus-meet/ios/JitsiMeet.storyboard` in the same folder as AppDelegate.m
 - 1-5.) Replace the following code in AppDelegate.m:
 
 ```
@@ -59,7 +59,7 @@ This will create a navigation controller to be able to navigate between the Jits
 
 2-1.) select `Build Settings`, find `Search Paths`  
 2-2.) edit BOTH `Framework Search Paths` and `Library Search Paths`  
-2-3.) add path on BOTH sections with: `$(SRCROOT)/../node_modules/react-native-jitsi-meet/ios` with `recursive`  
+2-3.) add path on BOTH sections with: `$(SRCROOT)/../node_modules/react-native-qiscus-meet/ios` with `recursive`  
 
 ## Step 3. Change General Setting and Embed Framework
 
@@ -230,7 +230,7 @@ allprojects {
             url "https://maven.google.com"
         }
         maven { // <---- Add this block
-            url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+            url "https://artifactory.qiscus.com/artifactory/qiscus-meet" 
         }
         maven { url "https://jitpack.io" }
     }
@@ -264,16 +264,5 @@ import android.support.annotation.Nullable; // <--- Add this line if not already
     @Override
     protected @Nullable String getBundleAssetName() {
       return "app.bundle";
-    }
-```
-
-### Side-note
-
-If your app already includes `react-native-locale-detector` or `react-native-vector-icons`, you must exclude them from the `react-native-jitsi-meet` project implementation with the following code:
-
-```
-    implementation(project(':react-native-jitsi-meet')) {
-      exclude group: 'com.facebook.react',module:'react-native-locale-detector'
-      exclude group: 'com.facebook.react',module:'react-native-vector-icons'
     }
 ```
