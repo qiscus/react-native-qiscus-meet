@@ -1,4 +1,4 @@
-# react-native-jitsi-meet
+# react-native-qiscus-meet
 React native wrapper for Jitsi Meet SDK
 
 ## Install
