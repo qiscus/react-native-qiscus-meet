@@ -1,5 +1,5 @@
 # react-native-qiscus-meet
-React native wrapper for Jitsi Meet SDK
+Qiscus Meet is React native wrapper for Jitsi Meet SDK
 
 ## Install
 
@@ -9,7 +9,7 @@ React native wrapper for Jitsi Meet SDK
 
 In your component, 
 
-1.) import JitsiMeet and JitsiMeetEvents: `import QiscusMeet, { QiscusMeetEvents } from 'react-native-qiscus-meet';`
+1.) import QiscusMeet and QiscusMeetEvents: `import QiscusMeet, { QiscusMeetEvents } from 'react-native-qiscus-meet';`
 
 2.) add the following code: 
 
@@ -181,13 +181,13 @@ contains `<string>voip</string>`
  <activity android:name="com.reactnativejitsimeet.JitsiMeetNavigatorActivity" />
  ```
  
-3.) In `android/settings.gradle`, include react-native-jitsi-meet module
+3.) In `android/settings.gradle`, include react-native-qiscus-meet module
 ```gradle
-include ':react-native-jitsi-meet'
-project(':react-native-jitsi-meet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-jitsi-meet/android')
+include ':react-native-qiscus-meet'
+project(':react-native-qiscus-meet').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-qiscus-meet/android')
 ```
 
-4.) In `android/app/build.gradle`, add react-native-jitsi-meet to dependencies
+4.) In `android/app/build.gradle`, add react-native-qiscus-meet to dependencies
 ```gradle
 android {
   ...
@@ -204,7 +204,7 @@ android {
 }
 dependencies {
   ...
-    implementation(project(':react-native-jitsi-meet'))
+    implementation(project(':react-native-qiscus-meet'))
 }
 ```
 and add/replace the following lines:
