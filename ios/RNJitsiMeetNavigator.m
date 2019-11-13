@@ -53,4 +53,11 @@ RCT_EXPORT_METHOD(call:(NSString *)urlString)
     });
 }
 
+RCT_EXPORT_METHOD(endCall)
+{
+    RCTLogInfo(@"EndCall");
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        [jitsiMeetViewController endCall];
+    });
+}
 @end

@@ -13,6 +13,7 @@
 
 - (void) setDelegate:(id<JitsiMeetViewDelegate>) delegate;
 - (void)loadUrl:(NSString *) url;
+- (void)endCall;
 
 @end
 

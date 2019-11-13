@@ -28,6 +28,11 @@
     [jitsiMeetView join:options];
 }
 
+- (void)endCall {
+    JitsiMeetView *jitsiMeetView = (JitsiMeetView *) self.view;
+    [jitsiMeetView leave];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
