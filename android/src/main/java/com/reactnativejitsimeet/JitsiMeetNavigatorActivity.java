@@ -17,6 +17,9 @@ import com.facebook.react.modules.core.PermissionListener;
 import com.facebook.react.bridge.UiThreadUtil;
 import com.facebook.react.bridge.ReadableMap;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.jitsi.meet.sdk.JitsiMeetActivityInterface;
@@ -58,6 +61,10 @@ public class JitsiMeetNavigatorActivity extends FragmentActivity implements Jits
         view.join(options);
 
         setContentView(view);
+
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
@@ -70,6 +77,7 @@ public class JitsiMeetNavigatorActivity extends FragmentActivity implements Jits
         }
 
         JitsiMeetActivityDelegate.onHostDestroy(this);
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -141,5 +149,12 @@ public class JitsiMeetNavigatorActivity extends FragmentActivity implements Jits
 
     public void onConferenceWillJoin(Map<String, Object> data) {
         on("CONFERENCE_WILL_JOIN", data);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMeetEvent(MeetEvent event) {
+        if (event.message.equals(Event.ENDCALL)) {
+            JitsiMeetActivityDelegate.onHostDestroy(this);
+        }
     }
 }

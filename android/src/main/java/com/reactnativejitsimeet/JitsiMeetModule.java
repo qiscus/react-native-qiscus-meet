@@ -10,6 +10,8 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
+import org.greenrobot.eventbus.EventBus;
+
 public class JitsiMeetModule extends ReactContextBaseJavaModule {
     private DeviceEventManagerModule.RCTDeviceEventEmitter eventEmitter;
 
@@ -46,6 +48,11 @@ public class JitsiMeetModule extends ReactContextBaseJavaModule {
         intent.putExtra("url", url);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+    }
+
+    @ReactMethod
+    public void endCall() {
+        EventBus.getDefault().post(new MeetEvent(Event.ENDCALL));
     }
 
     public void onEventReceived(String event, WritableMap data) {
