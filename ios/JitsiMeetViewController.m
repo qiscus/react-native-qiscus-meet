@@ -23,7 +23,9 @@
 
 - (void)loadUrl:(NSString *) url {
     JitsiMeetView *jitsiMeetView = (JitsiMeetView *) self.view;
-    JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        builder.room = url;
+    JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        
+        builder.room = url;
+        builder.audioOnly = NO;
     }];
     [jitsiMeetView join:options];
 }
