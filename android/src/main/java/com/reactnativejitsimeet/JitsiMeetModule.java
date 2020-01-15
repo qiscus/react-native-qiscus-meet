@@ -66,7 +66,7 @@ public class JitsiMeetModule extends ReactContextBaseJavaModule {
     public void answer(boolean isConference, String room, String avatarUrl, String displayName, com.facebook.react.bridge.Callback errorCallback) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url("https://private-0e6b9-ganjarwidiatmansyah.apiary-mock.com/participants")
+                .url(preferencesHelper.getBaseUrl()+"/get-room-size?room="+room)
                 .build();
         client.newCall(request).enqueue(new Callback() {
             @Override

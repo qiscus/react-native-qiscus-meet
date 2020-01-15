@@ -53,11 +53,11 @@ RCT_EXPORT_METHOD(answer:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
     NSString *baseUrlMeet = [[NSUserDefaults standardUserDefaults]
                              stringForKey:@"baseUrlMeet"];
-    
+
     NSString* baseUrl = [NSString stringWithFormat:@"%@/%@", baseUrlMeet, room];
-    NSLog(@"BaseUrlMeet = %@", baseUrl);
+    NSString* baseUrlGetParticipant = [NSString stringWithFormat:@"%@/get-room-size?room=%@", baseUrlMeet, room];
     
-    [request setURL:[NSURL URLWithString:@"https://private-0e6b9-ganjarwidiatmansyah.apiary-mock.com/participants"]];
+    [request setURL:[NSURL URLWithString:baseUrlGetParticipant]];
     [request setHTTPMethod:@"GET"];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
