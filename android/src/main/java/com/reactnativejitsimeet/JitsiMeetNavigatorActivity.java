@@ -53,11 +53,14 @@ public class JitsiMeetNavigatorActivity extends FragmentActivity implements Jits
         super.onCreate(savedInstanceState);
 
         String url = getIntent().getStringExtra("url");
+        boolean isConference = getIntent().getBooleanExtra("isConference", true);
+
         view = new JitsiMeetView(this);
         view.setListener(this);
         JitsiMeetConferenceOptions options = new JitsiMeetConferenceOptions.Builder()
-            .setRoom(url)
-            .build();
+                .setRoom(url)
+                .setAudioOnly(!isConference)
+                .build();
         view.join(options);
 
         setContentView(view);

@@ -45,5 +45,5 @@ repositories {
 dependencies {
     //resolutionStrategy.force "org.webkit:android-jsc:r224109"
   implementation 'org.greenrobot:eventbus:3.1.1'
-  implementation ('com.qiscus.meet:meet-sdk:0.0.5'){ transitive = true }
+  implementation ('com.qiscus.meet:meet-sdk-alpha:0.0.6'){ transitive = true }
 }
