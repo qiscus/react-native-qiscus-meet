@@ -34,13 +34,12 @@ RCT_EXPORT_MODULE()
     return @[@"CONFERENCE_JOINED", @"CONFERENCE_LEFT", @"CONFERENCE_WILL_JOIN", @"CONFERENCE_ENTER_PIP"];
 }
 
-RCT_EXPORT_METHOD(setup:(NSString *)urlString isconference:(BOOL)isConference)
+RCT_EXPORT_METHOD(setup:(NSString *)urlString)
 {
     RCTLogInfo(@"Setup");
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     [defaults setObject:urlString forKey:@"baseUrlMeet"];
-    [defaults setBool:isConference forKey:@"isConferenceMeet"];
     [defaults synchronize];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"JitsiMeet" bundle:nil];
@@ -64,7 +63,9 @@ RCT_EXPORT_METHOD(answer:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString
     [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
         NSString *countParticipants = [json valueForKey:@"participants"];
-        if(![countParticipants  isEqual: @"0"]){
+        NSInteger intPartcipant = [countParticipants integerValue];
+        
+        if(intPartcipant > 0){
             dispatch_sync(dispatch_get_main_queue(), ^{
                 UIViewController* rootViewController = [[[[UIApplication sharedApplication]delegate] window] rootViewController];
                 UINavigationController *navigationController = (UINavigationController *) rootViewController;

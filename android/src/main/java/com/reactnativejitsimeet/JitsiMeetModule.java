@@ -25,8 +25,6 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import static org.webrtc.ContextUtils.getApplicationContext;
-
 public class JitsiMeetModule extends ReactContextBaseJavaModule {
     private DeviceEventManagerModule.RCTDeviceEventEmitter eventEmitter;
     PreferencesHelper preferencesHelper;
@@ -41,12 +39,11 @@ public class JitsiMeetModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void setup(String basUrl, boolean isConfrence) {
+    public void setup(String basUrl) {
       FLog.d("JitsiMeet", "Initialize");
 
       preferencesHelper = PreferencesHelper.getInstance(getReactApplicationContext());
       preferencesHelper.setBaseUrl(basUrl);
-      preferencesHelper.setConference(isConfrence);
 
       ReactApplicationContext context = getReactApplicationContext();
       this.eventEmitter = context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class);
@@ -80,12 +77,12 @@ public class JitsiMeetModule extends ReactContextBaseJavaModule {
                 String jsonData = response.body().string();
                 try {
                     JSONObject jsonObject = new JSONObject(jsonData);
-                    Log.d("Ganjar", "onResponse: " + jsonObject.get("participants"));
-                    if (jsonObject.get("participants").equals("0")){
-                        errorCallback.invoke("You haven't participants");
-                    } else {
-                        String url = preferencesHelper.getBaseUrl()+"/"+room;
+                    int intParticipant = (int) jsonObject.get("participants");
+                    if (intParticipant > 0 ) {
+                        String url = preferencesHelper.getBaseUrl() + "/" + room;
                         getJwtToken(isConference, url, avatarUrl, displayName);
+                    } else {
+                        errorCallback.invoke("You haven't participants");
                     }
                 } catch (JSONException e) {
                     errorCallback.invoke(e.getMessage());
