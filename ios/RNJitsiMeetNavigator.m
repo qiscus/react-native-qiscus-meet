@@ -34,22 +34,62 @@ RCT_EXPORT_MODULE()
     return @[@"CONFERENCE_JOINED", @"CONFERENCE_LEFT", @"CONFERENCE_WILL_JOIN", @"CONFERENCE_ENTER_PIP"];
 }
 
-RCT_EXPORT_METHOD(initialize)
+RCT_EXPORT_METHOD(setup:(NSString *)urlString isconference:(BOOL)isConference)
 {
-    RCTLogInfo(@"Initialize");
+    RCTLogInfo(@"Setup");
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setObject:urlString forKey:@"baseUrlMeet"];
+    [defaults setBool:isConference forKey:@"isConferenceMeet"];
+    [defaults synchronize];
+    
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"JitsiMeet" bundle:nil];
     jitsiMeetViewController = [storyboard instantiateViewControllerWithIdentifier:@"jitsiMeetStoryBoardID"];
 }
 
-RCT_EXPORT_METHOD(call:(NSString *)urlString)
+RCT_EXPORT_METHOD(answer:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName callback:(RCTResponseSenderBlock)callback)
 {
-    RCTLogInfo(@"Load URL %@", urlString);
+    RCTLogInfo(@"Load URL %@", room);
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+    NSString *baseUrlMeet = [[NSUserDefaults standardUserDefaults]
+                             stringForKey:@"baseUrlMeet"];
+    
+    NSString* baseUrl = [NSString stringWithFormat:@"%@/%@", baseUrlMeet, room];
+    NSLog(@"BaseUrlMeet = %@", baseUrl);
+    
+    [request setURL:[NSURL URLWithString:@"https://private-0e6b9-ganjarwidiatmansyah.apiary-mock.com/participants"]];
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        NSString *countParticipants = [json valueForKey:@"participants"];
+        if(![countParticipants  isEqual: @"0"]){
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                UIViewController* rootViewController = [[[[UIApplication sharedApplication]delegate] window] rootViewController];
+                UINavigationController *navigationController = (UINavigationController *) rootViewController;
+                [navigationController pushViewController:self->jitsiMeetViewController animated:true];
+                [self->jitsiMeetViewController setDelegate:self];
+                [self->jitsiMeetViewController loadUrl:baseUrl isVideo:isVideo avatarUrl:avatarUrl displayName:displayName];
+            });
+        } else {
+            callback(@[@"You haven't participants"]);
+        }
+    }] resume];
+}
+
+RCT_EXPORT_METHOD(call:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName)
+{
     dispatch_sync(dispatch_get_main_queue(), ^{
+        NSString *baseUrlMeet = [[NSUserDefaults standardUserDefaults]
+                                 stringForKey:@"baseUrlMeet"];
+        
+        NSString* baseUrl = [NSString stringWithFormat:@"%@,%@", baseUrlMeet, room];
         UIViewController* rootViewController = [[[[UIApplication sharedApplication]delegate] window] rootViewController];
         UINavigationController *navigationController = (UINavigationController *) rootViewController;
-        [navigationController pushViewController:jitsiMeetViewController animated:true];
-        [jitsiMeetViewController setDelegate:self];
-        [jitsiMeetViewController loadUrl:urlString];
+        [navigationController pushViewController:self->jitsiMeetViewController animated:true];
+        [self->jitsiMeetViewController setDelegate:self];
+        [self->jitsiMeetViewController loadUrl:baseUrl isVideo:isVideo avatarUrl:avatarUrl displayName:displayName];
     });
 }
 
@@ -57,7 +97,7 @@ RCT_EXPORT_METHOD(endCall)
 {
     RCTLogInfo(@"EndCall");
     dispatch_sync(dispatch_get_main_queue(), ^{
-        [jitsiMeetViewController endCall];
+        [self->jitsiMeetViewController endCall];
     });
 }
 @end

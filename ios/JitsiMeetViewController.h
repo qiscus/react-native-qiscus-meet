@@ -12,7 +12,7 @@
 @interface JitsiMeetViewController : UIViewController
 
 - (void) setDelegate:(id<JitsiMeetViewDelegate>) delegate;
-- (void)loadUrl:(NSString *) url;
+- (void)loadUrl:(NSString *)room isVideo:(BOOL)isVideo avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName;
 - (void)endCall;
 
 @end
