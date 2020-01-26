@@ -1,7 +1,7 @@
 {
   "name": "react-native-qiscus-meet",
   "description": "Qiscus Meet SDK wrapper for React Native.",
-  "version": "2.0.0.rc1",
+  "version": "1.1.1",
   "author": {
     "name": "rajapulau",
     "email": "rajapulau@gmail.com"
