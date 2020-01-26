@@ -1,17 +1,19 @@
 {
   "name": "react-native-qiscus-meet",
-  "description": "Qiscus Meet SDK wrapper from Jitsi Meet SDK for React Native.",
-  "version": "1.0.7",
+  "description": "Qiscus Meet SDK wrapper for React Native.",
+  "version": "2.0.0.rc1",
   "author": {
-    "name": "Qiscus",
+    "name": "rajapulau",
     "email": "rajapulau@gmail.com"
   },
-  "contributors": [],
+  "contributors": [
+  ],
   "homepage": "https://github.com/rajapulau/react-native-qiscus-meet",
   "bugs": {
     "url": "https://github.com/rajapulau/react-native-qiscus-meet/issues"
   },
-  "dependencies": {},
+  "dependencies": {
+  },
   "keywords": [
     "jitsi",
     "jitsi meet",
@@ -25,7 +27,7 @@
     "react-native-component"
   ],
   "license": "Apache-2.0",
-  "main": "index.js",
+  "main": "index",
   "nativePackage": true,
   "repository": {
     "type": "git",
