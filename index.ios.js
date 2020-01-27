@@ -1,11 +1,11 @@
 /**
- * @providesModule JitsiMeet
+ * @providesModule QiscusMeet
  */
 
 import { NativeModules, requireNativeComponent } from 'react-native';
 
-export const JitsiMeetView = requireNativeComponent('RNJitsiMeetView');
-export const JitsiMeetModule = NativeModules.RNJitsiMeetView;
-export default JitsiMeetModule;
+export const QiscusMeetView = requireNativeComponent('RNJitsiMeetView');
+export const QiscusMeetModule = NativeModules.RNJitsiMeetView;
+export default QiscusMeetModule;
 
 
