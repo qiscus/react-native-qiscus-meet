@@ -37,6 +37,7 @@ android {
 
 repositories {
   maven { url "https://artifactory.qiscus.com/artifactory/qiscus-meet" }
+  maven { url "https://dl.bintray.com/qiscustech/maven" }
   google()
   mavenCentral()
   jcenter()
