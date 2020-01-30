@@ -36,16 +36,14 @@ android {
 }
 
 repositories {
-  maven {
-      url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
-  }
+  maven { url "https://artifactory.qiscus.com/artifactory/qiscus-meet" }
   google()
   mavenCentral()
   jcenter()
 }
 
 dependencies {
-    implementation ('org.jitsi.react:jitsi-meet-sdk:2.4.0') {
-      transitive = true
-    }
+  implementation ('com.qiscus.meet:meet-sdk-alpha:0.0.8'){
+    transitive = true
+  }
 }
