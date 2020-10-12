@@ -1,6 +1,8 @@
 # OSX
 #
 .DS_Store
+.vscode/
+.watchmanconfig
 
 # Xcode
 #
@@ -29,6 +31,9 @@ build/
 .gradle
 local.properties
 *.iml
+android/.classpath
+android/.project
+android/.settings/
 
 # node.js
 #
