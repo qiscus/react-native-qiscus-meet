@@ -44,7 +44,7 @@ repositories {
 }
 
 dependencies {
-  implementation ('com.qiscus.meet:meet-sdk-alpha:0.0.8'){
-    transitive = true
-  }
+    implementation ('org.jitsi.react:jitsi-meet-sdk:2.4.0') {
+      transitive = true
+    }
 }

@@ -1,5 +1,6 @@
 #import "RNJitsiMeetViewManager.h"
 #import "RNJitsiMeetView.h"
+#import <JitsiMeet/JitsiMeetUserInfo.h>
 
 @implementation RNJitsiMeetViewManager{
     RNJitsiMeetView *jitsiMeetView;
@@ -75,12 +76,26 @@ RCT_EXPORT_METHOD(answer:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString
     }] resume];
 }
 
-RCT_EXPORT_METHOD(audioCall:(NSString *)urlString)
+RCT_EXPORT_METHOD(audioCall:(NSString *)urlString userInfo:(NSDictionary *)userInfo)
 {
     RCTLogInfo(@"Load Audio only URL %@", urlString);
+    JitsiMeetUserInfo * _userInfo = [[JitsiMeetUserInfo alloc] init];
+    if (userInfo != NULL) {
+      if (userInfo[@"displayName"] != NULL) {
+        _userInfo.displayName = userInfo[@"displayName"];
+      }
+      if (userInfo[@"email"] != NULL) {
+        _userInfo.email = userInfo[@"email"];
+      }
+      if (userInfo[@"avatar"] != NULL) {
+        NSURL *url = [NSURL URLWithString:[userInfo[@"avatar"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+        _userInfo.avatar = url;
+      }
+    }
     dispatch_sync(dispatch_get_main_queue(), ^{
         JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        
             builder.room = urlString;
+            builder.userInfo = _userInfo;
             builder.audioOnly = YES;
         }];
         [jitsiMeetView join:options];

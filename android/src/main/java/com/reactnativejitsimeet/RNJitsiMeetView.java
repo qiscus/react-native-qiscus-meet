@@ -2,8 +2,6 @@ package com.reactnativejitsimeet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -13,6 +11,7 @@ import org.jitsi.meet.sdk.BaseReactView;
 import org.jitsi.meet.sdk.JitsiMeet;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.jitsi.meet.sdk.ListenerUtils;
+import org.jitsi.meet.sdk.log.JitsiMeetLogger;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -104,7 +103,7 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener>
      * page.
      */
     public void enterPictureInPicture() {
-        Log.d("JitsiLogger", "PiP not supported: ");
+        JitsiMeetLogger.e("PiP not supported");
     }
 
     /**
