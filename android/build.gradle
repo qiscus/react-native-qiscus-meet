@@ -44,5 +44,5 @@ repositories {
 }
 
 dependencies {
-    implementation ('com.qiscus.meet:meet-sdk:2.3.0'){ transitive = true }
+    implementation('com.qiscus.meet:meet-qiscus:2.8.0') { transitive = true }
 }
