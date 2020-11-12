@@ -1,27 +1,14 @@
 import React, { useEffect } from 'react';
-import JitsiMeet, { JitsiMeetView } from 'react-native-jitsi-meet';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import QiscusMeet, { QiscusMeetView } from 'react-native-qiscus-meet';
 
 function App() {
 
   useEffect(() => {
-    setTimeout(() => {
-      const url = 'https://meet.jit.si/exemple';
-      const userInfo = {
-        displayName: 'User',
-        email: 'user@example.com',
-        avatar: 'https:/gravatar.com/avatar/abc123',
-      };
-      JitsiMeet.call(url, userInfo);
-      /* Você também pode usar o JitsiMeet.audioCall (url) para chamadas apenas de áudio */
-      /* Você pode terminar programaticamente a chamada com JitsiMeet.endCall () */
-    }, 1000);
+    const url = 'https://call.qiscus.com';
+    const appId = "meetstage-iec22sd";
+    QiscusMeet.setup(appId, url);
   }, [])
-
-  useEffect(() => {
-    return () => {
-      JitsiMeet.endCall();
-    };
-  });
 
   function onConferenceTerminated(nativeEvent) {
     /* Conference terminated event */
@@ -37,17 +24,61 @@ function App() {
     /* Conference will join event */
     console.log(nativeEvent)
   }
+
+  function endCall(nativeEvent) {
+    QiscusMeet.endCall();
+  }
+
+  function call() {
+    const userInfo = {
+          displayName: 'Meet User',
+          email: 'user@qiscus.net',
+          room: 'roomtest',
+          avatar: 'https:/gravatar.com/avatar/abc123',
+          videoMuted : true,
+          audioMuted : true,
+          audioOnly: false,
+    };
+    QiscusMeet.call(userInfo);
+  }
+
   return (
-    <JitsiMeetView
-      onConferenceTerminated={e => onConferenceTerminated(e)}
-      onConferenceJoined={e => onConferenceJoined(e)}
-      onConferenceWillJoin={e => onConferenceWillJoin(e)}
-      style={{
-        flex: 1,
-        height: '100%',
-        width: '100%',
-      }}
-    />
+    <>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => endCall()}
+      >
+        <Text>End Call</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => call()}
+      >
+        <Text>Start all</Text>
+      </TouchableOpacity>
+      <QiscusMeetView
+        onConferenceTerminated={e => onConferenceTerminated(e)}
+        onConferenceJoined={e => onConferenceJoined(e)}
+        onConferenceWillJoin={e => onConferenceWillJoin(e)}
+        style={{
+          flex: 1,
+          height: '100%',
+          width: '100%',
+          marginTop: 20,
+        }}
+      />
+    </>
   )
 }
+
+const styles = StyleSheet.create({
+  button: {
+    alignItems: "center",
+    backgroundColor: "#DDDDDD",
+    padding: 10,
+    marginTop: 10,
+
+  },
+});
+
 export default App;

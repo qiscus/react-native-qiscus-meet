@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3B39693723D94814004771FA /* RNJitsiMeetViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39693323D94813004771FA /* RNJitsiMeetViewManager.m */; };
-		3B39693823D94814004771FA /* RNJitsiMeetView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B39693523D94814004771FA /* RNJitsiMeetView.m */; };
-		3B39694323D9E7B2004771FA /* JitsiMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39694123D9E7B1004771FA /* JitsiMeet.framework */; };
-		3B39694423D9E7B2004771FA /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B39694223D9E7B2004771FA /* WebRTC.framework */; };
+		96EBEF4E2115B4A500BFE51E /* WebRTC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96EBEF4C2115B4A400BFE51E /* WebRTC.framework */; };
+		96EBEF4F2115B4A500BFE51E /* JitsiMeet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 96EBEF4D2115B4A500BFE51E /* JitsiMeet.framework */; };
+		96EBF0042119CADA00BFE51E /* JitsiMeetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBF0032119CADA00BFE51E /* JitsiMeetViewController.m */; };
+		96EBF0062119CCFB00BFE51E /* RNJitsiMeetNavigator.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBF0052119CCFB00BFE51E /* RNJitsiMeetNavigator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,13 +27,13 @@
 
 /* Begin PBXFileReference section */
 		014A3B5C1C6CF33500B6D375 /* libRNJitsiMeet.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRNJitsiMeet.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		3B39693323D94813004771FA /* RNJitsiMeetViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJitsiMeetViewManager.m; sourceTree = "<group>"; };
-		3B39693423D94814004771FA /* RNJitsiMeetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJitsiMeetView.h; sourceTree = "<group>"; };
-		3B39693523D94814004771FA /* RNJitsiMeetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RNJitsiMeetView.m; sourceTree = "<group>"; };
-		3B39693623D94814004771FA /* RNJitsiMeetViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RNJitsiMeetViewManager.h; sourceTree = "<group>"; };
-		3B39694123D9E7B1004771FA /* JitsiMeet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JitsiMeet.framework; path = "../../../jitsi-meet-sdk/JitsiMeet.framework"; sourceTree = "<group>"; };
-		3B39694223D9E7B2004771FA /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebRTC.framework; path = "../../../jitsi-meet-sdk/WebRTC.framework"; sourceTree = "<group>"; };
+		96EBEF4C2115B4A400BFE51E /* WebRTC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WebRTC.framework; sourceTree = "<group>"; };
+		96EBEF4D2115B4A500BFE51E /* JitsiMeet.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JitsiMeet.framework; sourceTree = "<group>"; };
 		96EBF0012119CA2500BFE51E /* JitsiMeet.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = JitsiMeet.storyboard; sourceTree = "<group>"; };
+		96EBF0022119CADA00BFE51E /* JitsiMeetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JitsiMeetViewController.h; sourceTree = "<group>"; };
+		96EBF0032119CADA00BFE51E /* JitsiMeetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JitsiMeetViewController.m; sourceTree = "<group>"; };
+		96EBF0052119CCFB00BFE51E /* RNJitsiMeetNavigator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RNJitsiMeetNavigator.m; sourceTree = "<group>"; };
+		96EBF0072119CD7000BFE51E /* RNJitsiMeetNavigator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RNJitsiMeetNavigator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,8 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B39694323D9E7B2004771FA /* JitsiMeet.framework in Frameworks */,
-				3B39694423D9E7B2004771FA /* WebRTC.framework in Frameworks */,
+				96EBEF4E2115B4A500BFE51E /* WebRTC.framework in Frameworks */,
+				96EBEF4F2115B4A500BFE51E /* JitsiMeet.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -52,13 +52,13 @@
 		014A3B531C6CF33500B6D375 = {
 			isa = PBXGroup;
 			children = (
-				3B39694123D9E7B1004771FA /* JitsiMeet.framework */,
-				3B39694223D9E7B2004771FA /* WebRTC.framework */,
-				3B39693423D94814004771FA /* RNJitsiMeetView.h */,
-				3B39693523D94814004771FA /* RNJitsiMeetView.m */,
-				3B39693623D94814004771FA /* RNJitsiMeetViewManager.h */,
-				3B39693323D94813004771FA /* RNJitsiMeetViewManager.m */,
+				96EBF0072119CD7000BFE51E /* RNJitsiMeetNavigator.h */,
+				96EBF0052119CCFB00BFE51E /* RNJitsiMeetNavigator.m */,
+				96EBF0022119CADA00BFE51E /* JitsiMeetViewController.h */,
+				96EBF0032119CADA00BFE51E /* JitsiMeetViewController.m */,
 				96EBF0012119CA2500BFE51E /* JitsiMeet.storyboard */,
+				96EBEF4D2115B4A500BFE51E /* JitsiMeet.framework */,
+				96EBEF4C2115B4A400BFE51E /* WebRTC.framework */,
 				014A3B5D1C6CF33500B6D375 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -110,7 +110,6 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 			);
 			mainGroup = 014A3B531C6CF33500B6D375;
@@ -128,8 +127,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B39693823D94814004771FA /* RNJitsiMeetView.m in Sources */,
-				3B39693723D94814004771FA /* RNJitsiMeetViewManager.m in Sources */,
+				96EBF0042119CADA00BFE51E /* JitsiMeetViewController.m in Sources */,
+				96EBF0062119CCFB00BFE51E /* RNJitsiMeetNavigator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

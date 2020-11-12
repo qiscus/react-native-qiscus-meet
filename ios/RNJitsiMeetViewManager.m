@@ -1,10 +1,14 @@
 #import "RNJitsiMeetViewManager.h"
 #import "RNJitsiMeetView.h"
 #import <JitsiMeet/JitsiMeetUserInfo.h>
+#import <Foundation/Foundation.h>
 
 @implementation RNJitsiMeetViewManager{
     RNJitsiMeetView *jitsiMeetView;
 }
+
+NSString *appId = @"";
+NSString *urlString = @"";
 
 RCT_EXPORT_MODULE(RNJitsiMeetView)
 RCT_EXPORT_VIEW_PROPERTY(onConferenceJoined, RCTBubblingEventBlock)
@@ -24,61 +28,41 @@ RCT_EXPORT_METHOD(initialize)
     RCTLogInfo(@"Initialize is deprecated in v2");
 }
 
-RCT_EXPORT_METHOD(setup:(NSString *)urlString)
+RCT_EXPORT_METHOD(call:(NSDictionary *)userInfo room:(NSString *)room videoMuted:(BOOL *)videoMuted audioMuted:(BOOL *)audioMuted token:(NSString *)token)
 {
-    RCTLogInfo(@"Setup");
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    [defaults setObject:urlString forKey:@"baseUrlMeet"];
-    [defaults synchronize];
+    RCTLogInfo(@"Load URL %@", urlString);
+    NSString *baseUrl = [NSString stringWithFormat:@"%@/%@/%@", urlString, appId, room];
 
+    JitsiMeetUserInfo * _userInfo = [[JitsiMeetUserInfo alloc] init];
+    if (userInfo != NULL) {
+      if (userInfo[@"displayName"] != NULL) {
+        _userInfo.displayName = userInfo[@"displayName"];
+      }
+      if (userInfo[@"email"] != NULL) {
+        _userInfo.email = userInfo[@"email"];
+      }
+      if (userInfo[@"avatar"] != NULL) {
+        NSURL *url = [NSURL URLWithString:[userInfo[@"avatar"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+        _userInfo.avatar = url;
+      }
+    }
+    dispatch_sync(dispatch_get_main_queue(), ^{
+        JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        
+            builder.room = baseUrl;
+            builder.token = token;
+            builder.audioMuted = audioMuted;
+            builder.videoMuted = videoMuted;
+            builder.userInfo = _userInfo;
+        }];
+        [jitsiMeetView join:options];
+    });
 }
 
-RCT_EXPORT_METHOD(call:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName callback:(RCTResponseSenderBlock)callback)
-{
-    NSString *baseUrlMeet = [[NSUserDefaults standardUserDefaults]
-                             stringForKey:@"baseUrlMeet"];
-
-    NSString* baseUrl = [NSString stringWithFormat:@"%@/%@", baseUrlMeet, room];
-    [self loadUrl:baseUrl isVideo:isVideo avatarUrl:avatarUrl displayName:displayName];
-}
-
-RCT_EXPORT_METHOD(answer:(BOOL)isVideo room:(NSString *)room avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName callback:(RCTResponseSenderBlock)callback)
-{
-    RCTLogInfo(@"Load URL %@", room);
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    NSString *baseUrlMeet = [[NSUserDefaults standardUserDefaults]
-                             stringForKey:@"baseUrlMeet"];
-
-    NSString* baseUrl = [NSString stringWithFormat:@"%@/%@", baseUrlMeet, room];
-    NSString* baseUrlGetParticipant = [NSString stringWithFormat:@"%@/get-room-size?room=%@", baseUrlMeet, room];
-    
-    [request setURL:[NSURL URLWithString:baseUrlGetParticipant]];
-    [request setHTTPMethod:@"GET"];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        
-        if (data) {
-            NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            NSString *countParticipants = [json valueForKey:@"participants"];
-            NSInteger intPartcipant = [countParticipants integerValue];
-            
-            if(intPartcipant > 0){
-                [self loadUrl:baseUrl isVideo:isVideo avatarUrl:avatarUrl displayName:displayName];
-            } else {
-                callback(@[@"You haven't participants"]);
-            }
-        } else {
-            callback(@[@"Server Errors"]);
-        }
-        
-    }] resume];
-}
-
-RCT_EXPORT_METHOD(audioCall:(NSString *)urlString userInfo:(NSDictionary *)userInfo)
+RCT_EXPORT_METHOD(audioCall:(NSDictionary *)userInfo room:(NSString *)room audioMuted:(BOOL *)audioMuted token:(NSString *)token)
 {
     RCTLogInfo(@"Load Audio only URL %@", urlString);
+     NSString *baseUrl = [NSString stringWithFormat:@"%@/%@/%@", urlString, appId, room];
+
     JitsiMeetUserInfo * _userInfo = [[JitsiMeetUserInfo alloc] init];
     if (userInfo != NULL) {
       if (userInfo[@"displayName"] != NULL) {
@@ -96,10 +80,18 @@ RCT_EXPORT_METHOD(audioCall:(NSString *)urlString userInfo:(NSDictionary *)userI
         JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {        
             builder.room = urlString;
             builder.userInfo = _userInfo;
+            builder.token = token;
+            builder.audioMuted = audioMuted;
             builder.audioOnly = YES;
         }];
         [jitsiMeetView join:options];
     });
+}
+
+RCT_EXPORT_METHOD(setup:(NSString *)baseUrl idApp:(NSString *)idApp)
+{
+  appId = idApp;
+  urlString = baseUrl;
 }
 
 RCT_EXPORT_METHOD(endCall)
@@ -109,46 +101,20 @@ RCT_EXPORT_METHOD(endCall)
     });
 }
 
-#pragma mark JitsiMeetViewDelegate
-
-- (void)loadUrl:(NSString *)room isVideo:(BOOL)isVideo avatarUrl:(NSString *)avatarUrl displayName:(NSString *)displayName {
-    
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *baseUrlMeet = [defaults stringForKey:@"baseUrlMeet"];
-    
-    NSString *endPoint = @":9090/generate_url";
-    NSString* generateTokenUrl = [NSString stringWithFormat:@"%@%@", baseUrlMeet, endPoint];
-        
-    NSDictionary *dictionary = @{ @"baseUrl" : room, @"avatar":avatarUrl, @"name":displayName };
-    NSData *JSONData = [NSJSONSerialization dataWithJSONObject:dictionary
-                                                       options:0
-                                                         error:nil];
-    
-        
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-    [request setURL:[NSURL URLWithString:generateTokenUrl]];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:JSONData];
-    
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-
-        if(data){
-            NSMutableArray *json = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-            NSString *url = [json valueForKey:@"url"];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                JitsiMeetConferenceOptions *options = [JitsiMeetConferenceOptions fromBuilder:^(JitsiMeetConferenceOptionsBuilder *builder) {
-                    builder.room = url;
-                    builder.audioOnly = !isVideo;
-                }];
-                [self->jitsiMeetView join:options];
-            });
-        } else {
-            [self endCall];
-        }
-        
-    }] resume];
+RCT_REMAP_METHOD(getSetup,
+                 getSetupWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  NSDictionary *setup = @{ @"url" : urlString, @"appId" : appId};
+  if (setup) {
+    resolve(setup);
+  } else {
+    NSError *error = @"Not found";
+    reject(@"no_setup", @"There were no setup", error);
+  }
 }
+
+#pragma mark JitsiMeetViewDelegate
 
 - (void)conferenceJoined:(NSDictionary *)data {
     RCTLogInfo(@"Conference joined");

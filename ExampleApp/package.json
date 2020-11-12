@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "react": "16.11.0",
-    "react-native": "0.62.2",
-    "react-native-jitsi-meet": "^2.1.1"
+"react": "16.13.1",
+    "react-native": "0.63.3",
+    "react-native-qiscus-meet": "../"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",

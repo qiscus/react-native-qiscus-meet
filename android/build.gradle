@@ -11,10 +11,10 @@ buildscript {
 
 apply plugin: 'com.android.library'
 
-def DEFAULT_COMPILE_SDK_VERSION = 26
-def DEFAULT_BUILD_TOOLS_VERSION = "27.0.3"
-def DEFAULT_TARGET_SDK_VERSION  = 22
-def DEFAULT_MIN_SDK_VERSION     = 17
+def DEFAULT_COMPILE_SDK_VERSION = 28
+def DEFAULT_BUILD_TOOLS_VERSION = "28.0.3"
+def DEFAULT_TARGET_SDK_VERSION  = 28
+def DEFAULT_MIN_SDK_VERSION     = 24
 
 android {
   compileSdkVersion rootProject.hasProperty('compileSdkVersion') ? rootProject.compileSdkVersion : DEFAULT_COMPILE_SDK_VERSION
@@ -36,13 +36,24 @@ android {
 }
 
 repositories {
+  maven {
+      url "https://github.com/jitsi/jitsi-maven-repository/raw/master/releases"
+  }
   maven { url "https://artifactory.qiscus.com/artifactory/qiscus-meet" }
-  maven { url "https://dl.bintray.com/qiscustech/maven" }
   google()
   mavenCentral()
   jcenter()
 }
 
 dependencies {
-    implementation('com.qiscus.meet:meet-qiscus:2.8.0') { transitive = true }
+  implementation ('com.qiscus.meet:meet-qiscus:2.9.3') {
+    // implementation ('org.jitsi.react:jitsi-meet-sdk:2.+') {
+      exclude group: 'com.facebook',module:'hermes'
+      // exclude group: 'com.facebook.react',module:'react-native-fast-image'
+      // exclude group: 'com.facebook.react',module:'react-native-community-async-storage'
+      // exclude group: 'com.facebook.react',module:'react-native-webview'
+      // exclude group: 'com.facebook.react',module:'react-native-linear-gradient'
+      // exclude group: 'com.facebook.react',module:'react-native-svg'
+      transitive = true
+    }
 }
