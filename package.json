@@ -8,9 +8,9 @@
   },
   "contributors": [
   ],
-  "homepage": "https://github.com/rajapulau/react-native-qiscus-meet",
+  "homepage": "https://github.com/qiscus/react-native-qiscus-meet",
   "bugs": {
-    "url": "https://github.com/rajapulau/react-native-qiscus-meet/issues"
+    "url": "https://github.com/qiscus/react-native-qiscus-meet/issues"
   },
   "dependencies": {
   },
@@ -31,6 +31,6 @@
   "nativePackage": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/rajapulau/react-native-qiscus-meet.git"
+    "url": "https://github.com/qiscus/react-native-qiscus-meet.git"
   }
 }
