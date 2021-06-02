@@ -1,14 +1,10 @@
 package com.reactnativejitsimeet;
 
-import android.util.Log;
-
 import com.facebook.react.bridge.ReadableMap;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-
-import timber.log.Timber;
 
 
 /**
@@ -19,8 +15,7 @@ class RNOngoingConferenceTracker {
 
     private static final String CONFERENCE_WILL_JOIN = "CONFERENCE_WILL_JOIN";
     private static final String CONFERENCE_TERMINATED = "CONFERENCE_TERMINATED";
-    private static final String PARTICIPANT_JOINED = "PARTICIPANT_JOINED";
-    private static final String PARTICIPANT_LEFT = "PARTICIPANT_LEFT";
+
     private final Collection<OngoingConferenceListener> listeners =
             Collections.synchronizedSet(new HashSet<OngoingConferenceListener>());
     private String currentConference;
@@ -51,22 +46,18 @@ class RNOngoingConferenceTracker {
             return;
         }
 
-        switch (name) {
+        switch(name) {
             case CONFERENCE_WILL_JOIN:
                 currentConference = url;
                 updateListeners();
-                Timber.d("CONFERENCE WILL JOIN EXTERNAL");
                 break;
 
             case CONFERENCE_TERMINATED:
                 if (url.equals(currentConference)) {
                     currentConference = null;
                     updateListeners();
-                    Timber.d("CONFERENCE EXTERNAL");
-
                 }
                 break;
-
         }
     }
 

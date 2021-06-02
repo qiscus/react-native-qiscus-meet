@@ -1,6 +1,6 @@
 #import "RNJitsiMeetViewManager.h"
 #import "RNJitsiMeetView.h"
-#import <JitsiMeet/JitsiMeetUserInfo.h>
+#import <JitsiMeetSDK/JitsiMeetUserInfo.h>
 #import <Foundation/Foundation.h>
 
 @implementation RNJitsiMeetViewManager{
@@ -14,6 +14,8 @@ RCT_EXPORT_MODULE(RNJitsiMeetView)
 RCT_EXPORT_VIEW_PROPERTY(onConferenceJoined, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onConferenceTerminated, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onConferenceWillJoin, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onParticipantJoined, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(onParticipantLeft, RCTBubblingEventBlock)
 RCT_EXPORT_VIEW_PROPERTY(onEnteredPip, RCTBubblingEventBlock)
 
 - (UIView *)view
@@ -150,6 +152,24 @@ RCT_REMAP_METHOD(getSetup,
     }
 
     jitsiMeetView.onEnteredPip(data);
+}
+
+- (void)participantJoined:(NSDictionary *)data {
+    RCTLogInfo(@"Participant Joined");
+    if (!jitsiMeetView.onParticipantJoined) {
+        return;
+    }
+
+    jitsiMeetView.onParticipantJoined(data);
+}
+
+- (void)participantLeft:(NSDictionary *)data {
+    RCTLogInfo(@"Participant Left");
+    if (!jitsiMeetView.onParticipantLeft) {
+        return;
+    }
+
+    jitsiMeetView.onParticipantLeft(data);
 }
 
 @end

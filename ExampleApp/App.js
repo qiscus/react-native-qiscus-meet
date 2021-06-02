@@ -9,7 +9,10 @@ function App() {
     const appId = "meetstage-iec22sd";
     QiscusMeet.setup(appId, url);
   }, [])
-
+  function endCall(nativeEvent) {
+    QiscusMeet.endCall();
+  }
+  
   function onConferenceTerminated(nativeEvent) {
     /* Conference terminated event */
     console.log(nativeEvent)
@@ -24,10 +27,17 @@ function App() {
     /* Conference will join event */
     console.log(nativeEvent)
   }
-
-  function endCall(nativeEvent) {
-    QiscusMeet.endCall();
+  function onParticipantJoined(nativeEvent){
+        /* Participant  joined conference */
+    console.log(nativeEvent)
   }
+  function onParticipantLeft(nativeEvent){
+        /* Participant left event */
+        endCall();
+        console.log(nativeEvent)
+
+  }
+
 
   function call() {
     const userInfo = {
@@ -60,6 +70,8 @@ function App() {
         onConferenceTerminated={e => onConferenceTerminated(e)}
         onConferenceJoined={e => onConferenceJoined(e)}
         onConferenceWillJoin={e => onConferenceWillJoin(e)}
+        onParticipantJoined={e => onParticipantJoined(e)}
+        onParticipantLeft={e => onParticipantLeft(e)}
         style={{
           flex: 1,
           height: '100%',

@@ -2,10 +2,10 @@
 
 buildscript {
     ext {
-        buildToolsVersion = "28.0.3"
+        compileSdkVersion = 29
+        buildToolsVersion = '29.0.2'
         minSdkVersion = 24
-        compileSdkVersion = 28
-        targetSdkVersion = 28
+        targetSdkVersion = 29
     }
     repositories {
         google()
@@ -39,7 +39,7 @@ allprojects {
 
 //         maven { url "file://Users/rajapulau/Documents/Qiscus/jitsi-meet-android-sdk-release" }
         maven { url "https://artifactory.qiscus.com/artifactory/qiscus-meet" }
-        
+
         maven {
             // Android JSC is installed from npm
             url("$rootDir/../node_modules/jsc-android/dist")

@@ -39,15 +39,15 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
     public void getSetup(Promise promise) {
         try {
             WritableMap map = Arguments.createMap();
-            map.putString("appId", this.appId);
-            map.putString("url", this.url);
+             map.putString("appId", this.appId);
+             map.putString("url", this.url);
             promise.resolve(map);
         } catch (IllegalViewOperationException e) {
             promise.reject("AppId and URL not set", e);
         }
     }
 
-    @ReactMethod
+    @ReactMethod 
     public void initialize() {
         Log.d("JitsiMeet", "Initialize is deprecated in v2");
     }
@@ -82,17 +82,17 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                     if (userInfo != null) {
                         if (userInfo.hasKey("displayName")) {
                             _userInfo.setDisplayName(userInfo.getString("displayName"));
-                        }
-                        if (userInfo.hasKey("email")) {
+                          }
+                          if (userInfo.hasKey("email")) {
                             _userInfo.setEmail(userInfo.getString("email"));
-                        }
-                        if (userInfo.hasKey("avatar")) {
+                          }
+                          if (userInfo.hasKey("avatar")) {
                             String avatarURL = userInfo.getString("avatar");
                             try {
                                 _userInfo.setAvatar(new URL(avatarURL));
                             } catch (MalformedURLException e) {
                             }
-                        }
+                          }
                     }
                     RNJitsiMeetConferenceOptions options = new RNJitsiMeetConferenceOptions.Builder()
                             .setRoom(serverUrl)
@@ -110,9 +110,9 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void audioCall(ReadableMap userInfo, String room, Boolean audioMuted, String token) {
-        String appId = this.appId;
-        String url = this.url;
-        String serverUrl = url + "/" + appId + "/" + room;
+       String appId = this.appId;
+       String url = this.url;
+       String serverUrl = url + "/" + appId + "/" + room;
 
         if(appId == null && appId.trim().isEmpty() ) {
             Log.d("QiscusMeet","Please setup appID first");
@@ -123,7 +123,7 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
             Log.d("QiscusMeet","Please setup server URL first");
             return;
         }
-
+        
 
         UiThreadUtil.runOnUiThread(new Runnable() {
             @Override
@@ -133,17 +133,17 @@ public class RNJitsiMeetModule extends ReactContextBaseJavaModule {
                     if (userInfo != null) {
                         if (userInfo.hasKey("displayName")) {
                             _userInfo.setDisplayName(userInfo.getString("displayName"));
-                        }
-                        if (userInfo.hasKey("email")) {
+                          }
+                          if (userInfo.hasKey("email")) {
                             _userInfo.setEmail(userInfo.getString("email"));
-                        }
-                        if (userInfo.hasKey("avatar")) {
+                          }
+                          if (userInfo.hasKey("avatar")) {
                             String avatarURL = userInfo.getString("avatar");
                             try {
                                 _userInfo.setAvatar(new URL(avatarURL));
                             } catch (MalformedURLException e) {
                             }
-                        }
+                          }
                     }
                     RNJitsiMeetConferenceOptions options = new RNJitsiMeetConferenceOptions.Builder()
                             .setRoom(serverUrl)
