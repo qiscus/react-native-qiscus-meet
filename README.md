@@ -38,6 +38,8 @@ class VideoCall extends React.Component {
     this.onConferenceTerminated = this.onConferenceTerminated.bind(this);
     this.onConferenceJoined = this.onConferenceJoined.bind(this);
     this.onConferenceWillJoin = this.onConferenceWillJoin.bind(this);
+    this.onParticipantJoined = this.onParticipantJoined.bind(this);
+    this.onParticipantLeft = this.onParticipantLeft.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +63,14 @@ class VideoCall extends React.Component {
   onConferenceWillJoin(nativeEvent) {
     /* Conference will join event */
   }
+  
+  onParticipantJoined(nativeEvent) {
+  /* Participant joined conference */
+  }
+  
+  onParticipantLeft(nativeEvent){
+  /* Participant left conference */
+  }
 
   render() {
     return (
@@ -82,7 +92,8 @@ You can add listeners for the following events:
 - onConferenceJoined
 - onConferenceTerminated
 - onConferenceWillJoin
-
+- onParticipantJoined
+- onParticipantLeft
 
 ## iOS Configuration
 
