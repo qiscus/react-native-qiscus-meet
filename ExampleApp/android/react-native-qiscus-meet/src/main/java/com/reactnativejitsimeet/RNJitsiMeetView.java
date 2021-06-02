@@ -2,41 +2,28 @@ package com.reactnativejitsimeet;
 
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.uimanager.events.RCTEventEmitter;
 
 import org.jitsi.meet.sdk.BaseReactView;
 import org.jitsi.meet.sdk.JitsiMeet;
-import org.jitsi.meet.sdk.JitsiMeetView;
 import org.jitsi.meet.sdk.JitsiMeetViewListener;
 import org.jitsi.meet.sdk.ListenerUtils;
 import org.jitsi.meet.sdk.log.JitsiMeetLogger;
 
 import java.lang.reflect.Method;
-import java.util.HashMap;
 import java.util.Map;
 
-import timber.log.Timber;
 
-
-public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
+public class RNJitsiMeetView extends BaseReactView<JitsiMeetViewListener>
+        implements RNOngoingConferenceTracker.OngoingConferenceListener {
 
     /**
      * The {@code Method}s of {@code JitsiMeetViewListener} by event name i.e.
      * redux action types.
      */
-    private static final String CONFERENCE_WILL_JOIN = "CONFERENCE_WILL_JOIN";
-    private static final String CONFERENCE_JOINED = "CONFERENCE_JOINED";
-    private static final String CONFERENCE_TERMINATED = "CONFERENCE_TERMINATED";
-    private static final String PARTICIPANT_JOINED = "PARTICIPANT_JOINED";
-    private static final String PARTICIPANT_LEFT = "PARTICIPANT_LEFT";
     private static final Map<String, Method> LISTENER_METHODS
             = ListenerUtils.mapListenerMethods(JitsiMeetViewListener.class);
 
@@ -81,11 +68,11 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
             String valueType = bValue.getClass().getSimpleName();
 
             if (valueType.contentEquals("Boolean")) {
-                result.putBoolean(key, (Boolean) bValue);
+                result.putBoolean(key, (Boolean)bValue);
             } else if (valueType.contentEquals("String")) {
-                result.putString(key, (String) bValue);
+                result.putString(key, (String)bValue);
             } else if (valueType.contentEquals("Bundle")) {
-                result.putBundle(key, mergeProps((Bundle) aValue, (Bundle) bValue));
+                result.putBundle(key, mergeProps((Bundle)aValue, (Bundle)bValue));
             } else {
                 throw new RuntimeException("Unsupported type: " + valueType);
             }
@@ -94,26 +81,22 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
         return result;
     }
 
-    IRNJitsiMeetViewReference mJitsiMeetViewReference;
-    ReactApplicationContext mReactContext;
-
-    public RNJitsiMeetView(@NonNull Context context, ReactApplicationContext mReactContext, IRNJitsiMeetViewReference mJitsiMeetViewReference) {
+    public RNJitsiMeetView(@NonNull Context context) {
         super(context);
-        this.mReactContext = mReactContext;
-        this.mJitsiMeetViewReference = mJitsiMeetViewReference;
-//        RNOngoingConferenceTracker.getInstance().addListener(this);
+
+        RNOngoingConferenceTracker.getInstance().addListener(this);
     }
 
-//    @Override
-//    public void dispose() {
-//        RNOngoingConferenceTracker.getInstance().removeListener(this);
-//        super.dispose();
-//    }
+    @Override
+    public void dispose() {
+        RNOngoingConferenceTracker.getInstance().removeListener(this);
+        super.dispose();
+    }
 
     /**
      * Enters Picture-In-Picture mode, if possible. This method is designed to
      * be called from the {@code Activity.onUserLeaveHint} method.
-     * <p>
+     *
      * This is currently not mandatory, but if used will provide automatic
      * handling of the picture in picture mode when user minimizes the app. It
      * will be probably the most useful in case the app is using the welcome
@@ -126,7 +109,6 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
     /**
      * Joins the conference specified by the given {@link RNJitsiMeetConferenceOptions}. If there is
      * already an active conference, it will be left and the new one will be joined.
-     *
      * @param options - Description of what conference must be joined and what options will be used
      *                when doing so.
      */
@@ -143,12 +125,12 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
 
     /**
      * Helper method to set the React Native props.
-     *
      * @param newProps - New props to be set on the React Native view.
      */
     private void setProps(@NonNull Bundle newProps) {
         // Merge the default options with the newly provided ones.
         Bundle props = mergeProps(new Bundle(), newProps);
+
         // XXX The setProps() method is supposed to be imperative i.e.
         // a second invocation with one and the same URL is expected to join
         // the respective conference again if the first invocation was followed
@@ -167,62 +149,24 @@ public class RNJitsiMeetView extends BaseReactView<JitsiMeetView> {
      * Handler for {@link RNOngoingConferenceTracker} events.
      * @param conferenceUrl
      */
-//    @Override
-//    public void onCurrentConferenceChanged(String conferenceUrl) {
-//        // This property was introduced in order to address
-//        // an exception in the Picture-in-Picture functionality which arose
-//        // because of delays related to bridging between JavaScript and Java. To
-//        // reduce these delays do not wait for the call to be transferred to the
-//        // UI thread.
-//        this.url = conferenceUrl;
-//    }
+    @Override
+    public void onCurrentConferenceChanged(String conferenceUrl) {
+        // This property was introduced in order to address
+        // an exception in the Picture-in-Picture functionality which arose
+        // because of delays related to bridging between JavaScript and Java. To
+        // reduce these delays do not wait for the call to be transferred to the
+        // UI thread.
+        this.url = conferenceUrl;
+    }
 
     /**
+     *
      * @param name The name of the event.
      * @param data The details/specifics of the event to send determined
-     *             by/associated with the specified {@code name}.
+     * by/associated with the specified {@code name}.
      */
     @Override
     protected void onExternalAPIEvent(String name, ReadableMap data) {
         onExternalAPIEvent(LISTENER_METHODS, name, data);
-        WritableMap event = Arguments.createMap();
-        switch (name) {
-            case CONFERENCE_WILL_JOIN:
-                event.putString("url", (String) data.getString("url"));
-                mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        mJitsiMeetViewReference.getJitsiMeetView().getId(),
-                        "conferenceWillJoin",
-                        event);
-                break;
-            case CONFERENCE_JOINED:
-                event.putString("url", (String) data.getString("url"));
-                mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        mJitsiMeetViewReference.getJitsiMeetView().getId(),
-                        "conferenceJoined",
-                        event);
-                break;
-            case CONFERENCE_TERMINATED:
-                event.putString("url", (String) data.getString("url"));
-                event.putString("error", (String) data.getString("error"));
-                mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        mJitsiMeetViewReference.getJitsiMeetView().getId(),
-                        "conferenceTerminated",
-                        event);
-                break;
-            case PARTICIPANT_JOINED:
-                event.putString("participantId", (String) data.getString("participantId"));
-                mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        mJitsiMeetViewReference.getJitsiMeetView().getId(),
-                        "participantJoined",
-                        event);
-                break;
-            case PARTICIPANT_LEFT:
-                event.putString("participantId", (String) data.getString("participantId"));
-                mReactContext.getJSModule(RCTEventEmitter.class).receiveEvent(
-                        mJitsiMeetViewReference.getJitsiMeetView().getId(),
-                        "participantLeft",
-                        event);
-                break;
-        }
     }
 }
